@@ -1,0 +1,21 @@
+{
+  "name": "Finer Vision Data Entry Form Test",
+  "short_name": "Data Entry Form",
+  "icons": [
+    {
+      "src": "/img/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/img/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "background_color": "#d2e1ff",
+  "description": "Finer Vision Data Entry Form Test",
+  "display": "fullscreen",
+  "start_url": "/",
+  "theme_color": "#06092B"
+}
