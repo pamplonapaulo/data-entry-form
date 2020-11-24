@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import api from '../../services/api'
+import { Users, User } from '../../types/api'
+
 import * as S from './styles'
 
-import { isEmailValid, isTextValid } from 'utils/formValidation'
+import { isEmailValid, isTextValid, phoneMask } from 'utils/formValidation'
 
 const Main = () => {
   const [step, setStep] = useState(1)
@@ -23,27 +25,61 @@ const Main = () => {
     birthYear: ''
   })
 
-  useEffect(() => {
-    console.log(userData)
-  }, [userData])
+  const [users, setUsers] = useState([])
+
+  const genders = [
+    'Select Gender',
+    'Male/ Man',
+    'Female/ Woman',
+    'TransMale/ TransMan',
+    'TransFemale/ TransWoman',
+    'Genderqueer/ Gender nonconforming',
+    'Something Else',
+    'Decline to Answer'
+  ]
 
   const handleNext = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
 
     if (step == 3) {
       handlePost()
-      setStep(4)
     }
-    if (step == 2) setStep(3)
+
+    if (step == 2) {
+      setStep(3)
+      setUserData({
+        ...userData,
+        dateOfBirth:
+          dateOfBirth.birthDay +
+          '/' +
+          dateOfBirth.birthMonth +
+          '/' +
+          dateOfBirth.birthYear
+      })
+    }
+
     if (step == 1) setStep(2)
   }
 
   async function handlePost() {
     try {
       const response = await api.post('users', userData)
-      console.log(`Id: ${response.data}`)
+      console.log(response)
+      setStep(4)
+      handleGet()
     } catch (err) {
       alert(`Error on saving, please try again.`)
+    }
+  }
+
+  async function handleGet() {
+    try {
+      const response = await api.get('users')
+      console.log('Loading data...')
+      console.log(response)
+      setUsers(response.data)
+    } catch (err) {
+      alert('Error on loading')
     }
   }
 
@@ -63,27 +99,19 @@ const Main = () => {
     if (target.name === 'email' && isEmailValid(target.value))
       updateState(target)
 
-    if (target.name === 'gender') {
-      updateState(target)
-    }
+    if (target.name === 'gender') updateState(target)
 
     if (target.name === 'phone') updateState(target, phoneMask(target.value))
 
     if (target.name === 'birthDay') dayMask(target)
 
-    if (target.name === 'birthMonth') monthMask(target.value)
+    if (target.name === 'birthMonth') monthMask(target)
 
-    if (target.name === 'birthYear') yearMask(target.value)
+    if (target.name === 'birthYear') yearMask(target)
 
     if (target.name === 'comments' && isTextValid(target.value, 5000))
       updateState(target)
   }
-
-  const phoneMask = (value: string) =>
-    value
-      .replace(/[\D+]/g, '')
-      .replace(/(\+44|44|)(7|07)(\d)/, '07$3')
-      .replace(/(\d{11})\d+?$/, '$1')
 
   const dayMask = (
     target: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -95,60 +123,45 @@ const Main = () => {
     const numberNumber = parseInt(stringNumber, 10)
 
     if (numberNumber > 0 && numberNumber < 32) {
-      setDateOfBirth({
-        ...dateOfBirth,
-        birthDay: target.value
-      })
-      setUserData({
-        ...userData,
-        dateOfBirth:
-          numberNumber.toString() +
-          '/' +
-          dateOfBirth.birthMonth +
-          '/' +
-          dateOfBirth.birthYear
-      })
+      updateDateOfBirth(target)
     }
   }
 
-  const monthMask = (value: string) => {
-    const stringNumber = value
+  const monthMask = (
+    target: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+  ) => {
+    const stringNumber = target.value
       .replace(/(0)(\d{2})(\d+)/g, '$2')
       .replace(/^([0-1]\d|[1-9]\d{2,})$/g, '$1')
 
     const numberNumber = parseInt(stringNumber, 10)
 
     if (numberNumber > 0 && numberNumber < 13) {
-      setDateOfBirth({
-        ...dateOfBirth,
-        birthMonth: numberNumber.toString()
-      })
-      setUserData({
-        ...userData,
-        dateOfBirth:
-          dateOfBirth.birthDay +
-          '/' +
-          numberNumber.toString() +
-          '/' +
-          dateOfBirth.birthYear
-      })
+      updateDateOfBirth(target)
     }
   }
 
-  const yearMask = (value: string) => {
-    const numberNumber = parseInt(value, 10)
+  const yearMask = (
+    target: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+  ) => {
+    const numberNumber = parseInt(target.value, 10)
 
-    if (value.length < 5 && numberNumber < new Date().getFullYear() - 18) {
-      setDateOfBirth({
-        ...dateOfBirth,
-        birthYear: value
-      })
-      setUserData({
-        ...userData,
-        dateOfBirth:
-          dateOfBirth.birthDay + '/' + dateOfBirth.birthMonth + '/' + value
-      })
+    if (
+      target.value.length < 5 &&
+      numberNumber < new Date().getFullYear() - 18
+    ) {
+      updateDateOfBirth(target)
     }
+  }
+
+  const updateDateOfBirth = (
+    target: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
+    value?: string
+  ) => {
+    setDateOfBirth({
+      ...dateOfBirth,
+      [target.name]: value ? value : target.value
+    })
   }
 
   const updateState = (
@@ -219,18 +232,11 @@ const Main = () => {
             <S.InputWrapper>
               <S.Label>Gender</S.Label>
               <S.Select name="gender" onChange={handleInputChange}>
-                <option value="Select Gender">Select Gender</option>
-                <option value="Male/ Man">Male/ Man</option>
-                <option value="Female/ Woman">Female/ Woman</option>
-                <option value="TransMale/ TransMan">TransMale/ TransMan</option>
-                <option value="TransFemale/ TransWoman">
-                  TransFemale/ TransWoman
-                </option>
-                <option value="Genderqueer/ Gender nonconforming">
-                  Genderqueer/ Gender nonconforming
-                </option>
-                <option value="Something Else">Something Else</option>
-                <option value="Decline to Answer">Decline to Answer</option>
+                {genders.map((gender: string) => (
+                  <option key={gender} value={gender}>
+                    {gender}
+                  </option>
+                ))}
               </S.Select>
             </S.InputWrapper>
           </S.Field>
@@ -284,6 +290,39 @@ const Main = () => {
           <S.Button onClick={(e) => handleNext(e)}>{'Next >'}</S.Button>
         </S.Form>
       </S.Step>
+
+      {step == 4 && (
+        <S.Display>
+          <table>
+            <thead>
+              <S.TableRow>
+                <S.TableHeader>Id</S.TableHeader>
+                <S.TableHeader>First name</S.TableHeader>
+                <S.TableHeader>Surname</S.TableHeader>
+                <S.TableHeader>Email</S.TableHeader>
+                <S.TableHeader>Phone</S.TableHeader>
+                <S.TableHeader>Gender</S.TableHeader>
+                <S.TableHeader>Date of birth</S.TableHeader>
+                <S.TableHeader>Comments</S.TableHeader>
+              </S.TableRow>
+            </thead>
+            <tbody>
+              {users.map((user: User) => (
+                <S.TableRow key={user.id}>
+                  <S.TableData>{user.id}</S.TableData>
+                  <S.TableData>{user.firstName}</S.TableData>
+                  <S.TableData>{user.surname}</S.TableData>
+                  <S.TableData>{user.email}</S.TableData>
+                  <S.TableData>{user.phone}</S.TableData>
+                  <S.TableData>{user.gender}</S.TableData>
+                  <S.TableData>{user.dateOfBirth}</S.TableData>
+                  <S.TableData>{user.comments}</S.TableData>
+                </S.TableRow>
+              ))}
+            </tbody>
+          </table>
+        </S.Display>
+      )}
     </S.Wrapper>
   )
 }

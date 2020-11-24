@@ -155,3 +155,22 @@ export const Button = styled.button`
     background-color: #28262C;
   }
 `
+
+export const Display = styled.section`
+  background-color: #28262C;
+  margin-top: 50px;
+  width: 75%;
+`
+
+export const TableRow = styled.tr`
+  background: #ccc;
+  color: black;
+  height: 30px;
+`
+export const TableHeader = styled.th`
+  margin: 10px 0;
+`
+
+export const TableData = styled.td`
+  padding: 0 5px;
+`
