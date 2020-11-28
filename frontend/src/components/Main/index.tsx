@@ -1,14 +1,26 @@
 import React, { useState } from 'react'
-import api from '../../services/api'
-import { Users, User } from '../../types/api'
+import api from 'services/api'
+import { User } from 'types/api'
+
+import Input from 'components/Input'
 
 import * as S from './styles'
 
-import { isEmailValid, isTextValid, phoneMask } from 'utils/formValidation'
+import {
+  isEmailValid,
+  isTextValid,
+  phoneMask,
+  isPhoneValid,
+  isGenderValid,
+  isDayValid,
+  isMonthValid,
+  isYearValid,
+  isDateValid
+} from 'utils/formValidation'
 
 const Main = () => {
   const [step, setStep] = useState(1)
-
+  const [statusMessage, setStatusMessage] = useState('')
   const [userData, setUserData] = useState({
     firstName: '',
     surname: '',
@@ -18,14 +30,27 @@ const Main = () => {
     dateOfBirth: '',
     comments: ''
   })
-
   const [dateOfBirth, setDateOfBirth] = useState({
     birthDay: '',
     birthMonth: '',
     birthYear: ''
   })
-
   const [users, setUsers] = useState([])
+  const [requireds, setRequireds] = useState({
+    firstName: false,
+    surname: false,
+    email: false,
+    phone: false,
+    gender: false,
+    dateOfBirth: false
+  })
+
+  const dateValidation = (bool: boolean) => {
+    setRequireds({
+      ...requireds,
+      dateOfBirth: bool
+    })
+  }
 
   const genders = [
     'Select Gender',
@@ -45,20 +70,39 @@ const Main = () => {
       handlePost()
     }
 
-    if (step == 2) {
+    if (
+      step == 2 &&
+      requireds.gender === true &&
+      requireds.dateOfBirth === true &&
+      requireds.phone === true
+    ) {
       setStep(3)
-      setUserData({
-        ...userData,
-        dateOfBirth:
-          dateOfBirth.birthDay +
-          '/' +
-          dateOfBirth.birthMonth +
-          '/' +
-          dateOfBirth.birthYear
-      })
+    } else if (step == 2) {
+      setStatusMessage(
+        `Fields with error:
+          ${!requireds.gender ? ' Gender ' : ''}
+          ${!requireds.phone ? ' Telephone number ' : ''}
+          ${!requireds.dateOfBirth ? ' Date Of Birth ' : ''}
+          `
+      )
     }
 
-    if (step == 1) setStep(2)
+    if (
+      step == 1 &&
+      requireds.firstName === true &&
+      requireds.surname === true &&
+      requireds.email === true
+    ) {
+      setStep(2)
+    } else if (step == 1) {
+      setStatusMessage(
+        `Fields with error:
+          ${!requireds.firstName ? ' First Name ' : ''}
+          ${!requireds.surname ? ' Surname ' : ''}
+          ${!requireds.email ? ' Email ' : ''}
+          `
+      )
+    }
   }
 
   async function handlePost() {
@@ -90,78 +134,44 @@ const Main = () => {
   ) => {
     const target = e.target
 
-    if (target.name === 'firstName' && isTextValid(target.value, 100))
+    if (target.name === 'firstName' && isTextValid(target.value, 100)) {
+      setRequireds({ ...requireds, firstName: true })
       updateState(target)
+    }
 
-    if (target.name === 'surname' && isTextValid(target.value, 100))
+    if (target.name === 'surname' && isTextValid(target.value, 100)) {
+      setRequireds({ ...requireds, surname: true })
       updateState(target)
+    }
 
-    if (target.name === 'email' && isEmailValid(target.value))
+    if (target.name === 'email' && isEmailValid(target.value)) {
+      setRequireds({ ...requireds, email: true })
       updateState(target)
+    }
 
-    if (target.name === 'gender') updateState(target)
+    if (target.name === 'gender' && isGenderValid(target.value, genders)) {
+      setRequireds({ ...requireds, gender: true })
+      updateState(target)
+    }
 
-    if (target.name === 'phone') updateState(target, phoneMask(target.value))
+    if (target.name === 'phone') {
+      updateState(target, phoneMask(target.value))
+      isPhoneValid(phoneMask(target.value))
+        ? setRequireds({ ...requireds, phone: true })
+        : setRequireds({ ...requireds, phone: false })
+    }
 
-    if (target.name === 'birthDay') dayMask(target)
+    if (target.name === 'birthDay' && isDayValid(target.value))
+      updateBirthState(target)
 
-    if (target.name === 'birthMonth') monthMask(target)
+    if (target.name === 'birthMonth' && isMonthValid(target.value))
+      updateBirthState(target)
 
-    if (target.name === 'birthYear') yearMask(target)
+    if (target.name === 'birthYear' && isYearValid(target.value))
+      updateBirthState(target)
 
     if (target.name === 'comments' && isTextValid(target.value, 5000))
       updateState(target)
-  }
-
-  const dayMask = (
-    target: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-  ) => {
-    const stringNumber = target.value
-      .replace(/(0)(\d{2})(\d+)/g, '$2')
-      .replace(/^([0-3]\d|[1-9]\d{2,})$/g, '$1')
-
-    const numberNumber = parseInt(stringNumber, 10)
-
-    if (numberNumber > 0 && numberNumber < 32) {
-      updateDateOfBirth(target)
-    }
-  }
-
-  const monthMask = (
-    target: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-  ) => {
-    const stringNumber = target.value
-      .replace(/(0)(\d{2})(\d+)/g, '$2')
-      .replace(/^([0-1]\d|[1-9]\d{2,})$/g, '$1')
-
-    const numberNumber = parseInt(stringNumber, 10)
-
-    if (numberNumber > 0 && numberNumber < 13) {
-      updateDateOfBirth(target)
-    }
-  }
-
-  const yearMask = (
-    target: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-  ) => {
-    const numberNumber = parseInt(target.value, 10)
-
-    if (
-      target.value.length < 5 &&
-      numberNumber < new Date().getFullYear() - 18
-    ) {
-      updateDateOfBirth(target)
-    }
-  }
-
-  const updateDateOfBirth = (
-    target: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
-    value?: string
-  ) => {
-    setDateOfBirth({
-      ...dateOfBirth,
-      [target.name]: value ? value : target.value
-    })
   }
 
   const updateState = (
@@ -174,43 +184,102 @@ const Main = () => {
     })
   }
 
+  const updateBirthState = (
+    target: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
+    value?: string
+  ) => {
+    setDateOfBirth({
+      ...dateOfBirth,
+      [target.name]: value ? value : target.value
+    })
+
+    updateDateOfBirth(target.name, target.value)
+  }
+
+  const mountDateString = (day: string, month: string, year: string) => {
+    return `${month.length == 2 ? month : '0' + month}/${
+      day.length == 2 ? day : '0' + day
+    }/${year}`
+  }
+
+  const updateDateOfBirth = (dateField: string, dateValue: string) => {
+    let dateString = ''
+
+    if (dateField === 'birthDay') {
+      dateString = mountDateString(
+        dateValue,
+        dateOfBirth.birthMonth,
+        dateOfBirth.birthYear
+      )
+    }
+
+    if (dateField === 'birthMonth') {
+      dateString = mountDateString(
+        dateOfBirth.birthDay,
+        dateValue,
+        dateOfBirth.birthYear
+      )
+    }
+
+    if (dateField === 'birthYear') {
+      dateString = mountDateString(
+        dateOfBirth.birthDay,
+        dateOfBirth.birthMonth,
+        dateValue
+      )
+    }
+
+    const isValid = isDateValid(dateString)
+
+    if (dateString.length == 10 && isValid) {
+      dateValidation(true)
+      dateString =
+        dateString.substr(3, 2) +
+        '/' +
+        dateString.substr(0, 2) +
+        '/' +
+        dateString.substr(6, 4)
+
+      setUserData({
+        ...userData,
+        dateOfBirth: dateString
+      })
+    } else {
+      dateValidation(false)
+    }
+  }
+
   return (
     <S.Wrapper>
       <S.Step>
         <S.Form isOpened={step == 1}>
           <S.Header>Step 1: Your details</S.Header>
           <S.Field>
-            <S.InputWrapper>
-              <S.Label>First Name</S.Label>
-              <S.Input
-                autoFocus
-                name="firstName"
-                type="text"
-                onChange={handleInputChange}
-                value={userData.firstName}
-              />
-            </S.InputWrapper>
-            <S.InputWrapper>
-              <S.Label>Surname</S.Label>
-              <S.Input
-                name="surname"
-                type="text"
-                onChange={handleInputChange}
-                value={userData.surname}
-              />
-            </S.InputWrapper>
+            <Input
+              label="First Name"
+              autoFocus={true}
+              name="firstName"
+              type="text"
+              parentCallback={handleInputChange}
+              value={userData.firstName}
+            />
+            <Input
+              label="Surname"
+              name="surname"
+              type="text"
+              parentCallback={handleInputChange}
+              value={userData.surname}
+            />
           </S.Field>
 
           <S.Field>
-            <S.InputWrapper>
-              <S.Label>Email Adress:</S.Label>
-              <S.Input
-                name="email"
-                type="email"
-                onChange={handleInputChange}
-                customWidth={'300px'}
-              />
-            </S.InputWrapper>
+            <Input
+              label="Email Address"
+              name="email"
+              type="email"
+              parentCallback={handleInputChange}
+              width={'300px'}
+            />
           </S.Field>
 
           <S.Button onClick={(e) => handleNext(e)}>{'Next >'}</S.Button>
@@ -221,56 +290,48 @@ const Main = () => {
         <S.Form isOpened={step == 2}>
           <S.Header>Step 2: More comments</S.Header>
           <S.Field>
-            <S.InputWrapper>
-              <S.Label>Telephone number</S.Label>
-              <S.Input
-                name="phone"
-                onChange={handleInputChange}
-                value={userData.phone}
-              />
-            </S.InputWrapper>
-            <S.InputWrapper>
-              <S.Label>Gender</S.Label>
-              <S.Select name="gender" onChange={handleInputChange}>
-                {genders.map((gender: string) => (
-                  <option key={gender} value={gender}>
-                    {gender}
-                  </option>
-                ))}
-              </S.Select>
-            </S.InputWrapper>
+            <Input
+              label="Telephone number"
+              name="phone"
+              parentCallback={handleInputChange}
+              value={userData.phone}
+            />
+            <Input
+              label="Gender"
+              elementType="select"
+              name="gender"
+              options={genders}
+              parentCallback={handleInputChange}
+              value={userData.phone}
+            />
           </S.Field>
 
           <S.Field>
-            <S.InputWrapper>
-              <S.Label>Date of birth</S.Label>
-              <S.InLine>
-                <S.Input
-                  name="birthDay"
-                  type="number"
-                  placeholder="DD"
-                  customWidth={'55px'}
-                  onChange={handleInputChange}
-                  value={dateOfBirth.birthDay}
-                />
-                <S.Input
-                  name="birthMonth"
-                  type="number"
-                  placeholder="MM"
-                  customWidth={'55px'}
-                  onChange={handleInputChange}
-                  value={dateOfBirth.birthMonth}
-                />
-                <S.Input
-                  name="birthYear"
-                  type="number"
-                  placeholder="YYYY"
-                  customWidth={'80px'}
-                  onChange={handleInputChange}
-                  value={dateOfBirth.birthYear}
-                />
-              </S.InLine>
-            </S.InputWrapper>
+            <Input
+              label="Date of birth"
+              name="birthDay"
+              type="number"
+              parentCallback={handleInputChange}
+              placeholder="DD"
+              width={'55px'}
+              value={dateOfBirth.birthDay}
+            />
+            <Input
+              name="birthMonth"
+              type="number"
+              parentCallback={handleInputChange}
+              placeholder="MM"
+              width={'55px'}
+              value={dateOfBirth.birthMonth}
+            />
+            <Input
+              name="birthYear"
+              type="number"
+              parentCallback={handleInputChange}
+              placeholder="YYYY"
+              width={'80px'}
+              value={dateOfBirth.birthYear}
+            />
           </S.Field>
 
           <S.Button onClick={(e) => handleNext(e)}>{'Next >'}</S.Button>
@@ -281,10 +342,12 @@ const Main = () => {
         <S.Form isOpened={step == 3}>
           <S.Header>Step 3: Final comments</S.Header>
           <S.Field>
-            <S.InputWrapper>
-              <S.Label>Comments</S.Label>
-              <S.TextArea name="comments" onChange={handleInputChange} />
-            </S.InputWrapper>
+            <Input
+              label="Comments"
+              elementType="textArea"
+              name="comments"
+              parentCallback={handleInputChange}
+            />
           </S.Field>
 
           <S.Button onClick={(e) => handleNext(e)}>{'Next >'}</S.Button>
@@ -321,6 +384,11 @@ const Main = () => {
               ))}
             </tbody>
           </table>
+        </S.Display>
+      )}
+      {statusMessage.length > 0 && (
+        <S.Display>
+          <h1>{statusMessage}</h1>
         </S.Display>
       )}
     </S.Wrapper>
