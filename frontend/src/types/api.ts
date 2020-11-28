@@ -8,7 +8,3 @@ export type User = {
   dateOfBirth: string
   comments: string
 }
-
-export type Users = {
-  users: User[]
-}
