@@ -12,11 +12,11 @@ import {
   phoneMask,
   isPhoneValid,
   isGenderValid,
+  isDateValid,
   isDayValid,
   isMonthValid,
-  isYearValid,
-  isDateValid
-} from 'utils/formValidation'
+  isYearValid
+} from '../../../../shared/formValidation'
 
 const Main = () => {
   const [step, setStep] = useState(1)
@@ -140,8 +140,13 @@ const Main = () => {
     }
 
     if (target.name === 'surname' && isTextValid(target.value, 100)) {
-      setRequireds({ ...requireds, surname: true })
       updateState(target)
+
+      if (target.value.length >= 2) {
+        setRequireds({ ...requireds, surname: true })
+      } else {
+        setRequireds({ ...requireds, surname: false })
+      }
     }
 
     if (target.name === 'email' && isEmailValid(target.value)) {
@@ -149,14 +154,14 @@ const Main = () => {
       updateState(target)
     }
 
-    if (target.name === 'gender' && isGenderValid(target.value, genders)) {
+    if (target.name === 'gender' && isGenderValid(target.value)) {
       setRequireds({ ...requireds, gender: true })
       updateState(target)
     }
 
     if (target.name === 'phone') {
       updateState(target, phoneMask(target.value))
-      isPhoneValid(phoneMask(target.value))
+      isPhoneValid(target.value)
         ? setRequireds({ ...requireds, phone: true })
         : setRequireds({ ...requireds, phone: false })
     }
@@ -229,20 +234,20 @@ const Main = () => {
       )
     }
 
-    const isValid = isDateValid(dateString)
+    const newString =
+      dateString.substr(3, 2) +
+      '/' +
+      dateString.substr(0, 2) +
+      '/' +
+      dateString.substr(6, 4)
 
-    if (dateString.length == 10 && isValid) {
+    const isValid = isDateValid(newString)
+
+    if (newString.length == 10 && isValid) {
       dateValidation(true)
-      dateString =
-        dateString.substr(3, 2) +
-        '/' +
-        dateString.substr(0, 2) +
-        '/' +
-        dateString.substr(6, 4)
-
       setUserData({
         ...userData,
-        dateOfBirth: dateString
+        dateOfBirth: newString
       })
     } else {
       dateValidation(false)

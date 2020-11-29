@@ -76,14 +76,22 @@ export const Button = styled.button`
   background-color: #655bb4;
 
   &:hover {
-    background-color: #28262C;
+    background-color: #28262c;
   }
 `
 
 export const Display = styled.section`
-  background-color: #28262C;
+  background-color: #28262c;
   margin-top: 50px;
-  width: 75%;
+  overflow-y: scroll;
+  max-height: 400px;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `
 
 export const TableRow = styled.tr`

@@ -1,20 +1,15 @@
 {
-  "name": "Finer Vision Data Entry Form Test",
+  "name": "Data Entry Form | Paulo Pamplona",
   "short_name": "Data Entry Form",
   "icons": [
     {
-      "src": "/img/icon-192.png",
+      "src": "/img/favicon.png",
       "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "/img/icon-512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "32x32"
     }
   ],
   "background_color": "#d2e1ff",
-  "description": "Finer Vision Data Entry Form Test",
+  "description": "Data Entry Form in Next.js, from PauloPamplona.com to FinerVision.com",
   "display": "fullscreen",
   "start_url": "/",
   "theme_color": "#06092B"
