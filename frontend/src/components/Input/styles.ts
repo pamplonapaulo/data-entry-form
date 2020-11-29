@@ -3,7 +3,7 @@ import styled from 'styled-components'
 export const InputWrapper = styled.div<{ customWidth?: string }>`
   display: flex;
   flex-direction: column;
-  margin-right: 10px;
+  margin-right: 5px;
   width: ${(p) => (p.customWidth ? p.customWidth : 'auto')};
 `
 
@@ -20,9 +20,9 @@ export const Input = styled.input<{ customWidth?: string }>`
   border-color: #ccc;
   border-radius: 10px;
   border-width: 0;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
-  font-size: 1.5rem;
-  height: 30px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.6);
+  font-size: 1.4rem;
+  height: 35px;
   margin-right: 5px;
   outline-width: 0;
   padding: 10px;
@@ -72,22 +72,14 @@ export const SelectWrapper = styled.div`
 `
 
 export const Select = styled.select`
-  border-color: #ccc;
-  border-radius: 10px;
-  border-width: 1px;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
-  height: 30px;
+  height: 35px;
   outline-width: 0;
   margin-right: 5px;
-  -webkit-appearance: none;
-  -ms-appearance: none;
-  -moz-appearance: none;
   appearance: none;
   border-color: #ccc;
   border-radius: 10px;
   border-width: 1px;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
-  height: 30px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.6);
   outline-width: 0;
   margin-right: 5px;
   padding-left: 1rem;
@@ -98,7 +90,7 @@ export const TextArea = styled.textarea`
   border-color: #ccc;
   border-radius: 10px;
   border-width: 1px;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.6);
   font-size: 1.5rem;
   height: 150px;
   outline-width: 0;
