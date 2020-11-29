@@ -91,7 +91,6 @@ export const Select = styled.select`
   outline-width: 0;
   margin-right: 5px;
   padding-left: 1rem;
-  color: #737373;
   cursor: pointer;
 `
 

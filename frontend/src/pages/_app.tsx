@@ -7,13 +7,13 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Finer Vision Data Entry Form Test</title>
-        <link rel="shortcut icon" href="/img/icon-512.png" />
-        <link rel="apple-touch-icon" href="/img/icon-512.png" />
+        <title>Data Entry Form | Paulo Pamplona</title>
+        <link rel="shortcut icon" href="/img/favicon.png" />
+        <link rel="apple-touch-icon" href="/img/favicon.png" />
         <link rel="manifest" href="/manifest.json" />
         <meta
-          name="Finer Vision Data Entry Form Test"
-          content="Finer Vision Data Entry Form Test"
+          name="Data Entry Form"
+          content="Data Entry Form in Next.js, from PauloPamplona.com to FinerVision.com"
         />
       </Head>
       <GlobalStyles />

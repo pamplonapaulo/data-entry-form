@@ -2,7 +2,7 @@ export const isEmailValid = (email: string) =>
   /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email)
 
 export const isTextValid = (text: string, length: number) => {
-  const regex = new RegExp(`^[a-z ,.'-]{1,` + length + '}', 'i')
+  const regex = new RegExp(`^[a-z ,.'-]{0,` + length + '}', 'i')
   return regex.test(text)
 }
 
@@ -44,7 +44,7 @@ export const isYearValid = (value: string) => {
 export const isDateValid = (dateStr: string) => {
   const dateObj = new Date(dateStr)
   const actualDate = dateObj.getDate()
-  const actualMonth = dateObj.getMonth() + 1 // months are from 0 to 11 in JS
+  const actualMonth = dateObj.getMonth() + 1
   const actualFullYear = dateObj.getFullYear()
   const [strMonth, strDate, strFullYear] = dateStr.split('/').map(Number)
 
