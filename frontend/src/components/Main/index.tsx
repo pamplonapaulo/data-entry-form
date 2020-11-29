@@ -318,7 +318,7 @@ const Main = () => {
               type="number"
               parentCallback={handleInputChange}
               placeholder="DD"
-              width={'55px'}
+              width={'35px'}
               value={dateOfBirth.birthDay}
             />
             <Input
@@ -326,7 +326,7 @@ const Main = () => {
               type="number"
               parentCallback={handleInputChange}
               placeholder="MM"
-              width={'55px'}
+              width={'35px'}
               value={dateOfBirth.birthMonth}
             />
             <Input
@@ -334,7 +334,7 @@ const Main = () => {
               type="number"
               parentCallback={handleInputChange}
               placeholder="YYYY"
-              width={'80px'}
+              width={'50px'}
               value={dateOfBirth.birthYear}
             />
           </S.Field>
