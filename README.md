@@ -2,12 +2,16 @@
 
 ### pendencies:
 
+- Separate all date fields in a BirthDay component
 - Custom React Hooks
 - OWASP standards, where applicable – https://owasp.org/
 - Google ReCAPTCHA
 - Automated Tests (Jest)
 
 ### commit history:
+
+  - commit 27e31160159d2ddd50b03cad6796abe2df48156c<br/>
+  Date:   Mon Nov 30 12:16
 
   - commit 1a49f054cd7f7acc2602cd7400ac1590de7b55d0<br/>
   Date:   Mon Nov 30 11:09
