@@ -1,5 +1,5 @@
 export type User = {
-  id: string
+  id?: string
   firstName: string
   surname: string
   email: string
@@ -13,4 +13,13 @@ export type BDay = {
   birthDay: string
   birthMonth: string
   birthYear: string
+}
+
+export type Requireds = {
+  firstName: boolean
+  surname: boolean
+  email: boolean
+  phone: boolean
+  gender: boolean
+  dateOfBirth: boolean
 }
