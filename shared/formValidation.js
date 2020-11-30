@@ -62,12 +62,6 @@ module.exports = Object.freeze({
     const actualMonth = dateObj.getMonth() + 1
     const actualFullYear = dateObj.getFullYear()
     const [strMonth, strDate, strFullYear] = dateStr.split('/').map(Number)
-    console.log('validation shared file')
-    console.log(
-      strMonth === actualMonth &&
-      strDate === actualDate &&
-      strFullYear === actualFullYear
-    )
     return (
       strMonth === actualMonth &&
       strDate === actualDate &&
