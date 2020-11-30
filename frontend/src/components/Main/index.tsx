@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import api from 'services/api'
-import { User, BDay } from 'types/api'
+import { User } from 'types/api'
+import { useRequireds, useUser } from 'contexts'
 
 import Input from 'components/Input'
+import InputsBirthDay from 'components/InputsBirthDay'
 
 import * as S from './styles'
 
@@ -11,39 +13,18 @@ import {
   isTextValid,
   phoneMask,
   isPhoneValid,
-  isGenderValid,
-  isDateValid,
-  isDayValid,
-  isMonthValid,
-  isYearValid
+  isGenderValid
 } from '../../../../shared/formValidation'
 
 const Main = () => {
   const [step, setStep] = useState(1)
   const [statusMessage, setStatusMessage] = useState('')
-  const [userData, setUserData] = useState({
-    firstName: '',
-    surname: '',
-    email: '',
-    phone: '',
-    gender: '',
-    dateOfBirth: '',
-    comments: ''
-  })
-  const [dateOfBirth, setDateOfBirth] = useState({
-    birthDay: '',
-    birthMonth: '',
-    birthYear: ''
-  })
+
+  const { userData, setUserData } = useUser()
+
   const [users, setUsers] = useState([])
-  const [requireds, setRequireds] = useState({
-    firstName: true,
-    surname: true,
-    email: true,
-    phone: true,
-    gender: true,
-    dateOfBirth: true
-  })
+
+  const { requireds, setRequireds } = useRequireds()
 
   const genders = [
     'Select Gender',
@@ -99,7 +80,6 @@ const Main = () => {
   }
 
   async function handlePost() {
-    console.log(userData)
     try {
       const response = await api.post('users', userData)
       console.log(response)
@@ -118,23 +98,6 @@ const Main = () => {
     } catch (err) {
       alert('Error on loading')
     }
-  }
-
-  const handleBirthdayChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const target = e.target
-
-    if (target.name === 'birthDay' && isDayValid(target.value))
-      updateBirthState(target)
-
-    if (target.name === 'birthMonth' && isMonthValid(target.value))
-      updateBirthState(target)
-
-    if (target.name === 'birthYear' && isYearValid(target.value))
-      updateBirthState(target)
   }
 
   const handleInputChange = (
@@ -197,51 +160,6 @@ const Main = () => {
       ...userData,
       [target.name]: value ? value : target.value
     })
-  }
-
-  const updateBirthState = (
-    target: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
-    value?: string
-  ) => {
-    setDateOfBirth({
-      ...dateOfBirth,
-      [target.name]: value ? value : target.value
-    })
-
-    updateDateOfBirth(target.name, target.value)
-  }
-
-  const mountBirthString = (date: BDay) => {
-    const dateString = `${
-      date.birthDay.length == 2 ? date.birthDay : '0' + date.birthDay
-    }/${
-      date.birthMonth.length == 2 ? date.birthMonth : '0' + date.birthMonth
-    }/${date.birthYear}`
-
-    return dateString
-  }
-
-  const reorderBirthString = (date: string) =>
-    date.substr(3, 2) + '/' + date.substr(0, 2) + '/' + date.substr(6, 4)
-
-  const updateDateOfBirth = (dateField: string, dateValue: string) => {
-    const bDay = {
-      birthDay: dateOfBirth.birthDay,
-      birthMonth: dateOfBirth.birthMonth,
-      birthYear: dateOfBirth.birthYear,
-      [dateField]: dateValue
-    }
-    const newString = reorderBirthString(mountBirthString(bDay))
-    const isValid =
-      isDateValid(mountBirthString(bDay)) && newString.length === 10
-
-    if (isValid)
-      setUserData({
-        ...userData,
-        dateOfBirth: newString
-      })
-
-    setRequireds({ ...requireds, dateOfBirth: isValid })
   }
 
   return (
@@ -308,34 +226,7 @@ const Main = () => {
           </S.Field>
 
           <S.Field>
-            <Input
-              label="Date of birth"
-              name="birthDay"
-              type="number"
-              showAlert={!requireds.dateOfBirth}
-              parentCallback={handleBirthdayChange}
-              placeholder="DD"
-              width={'35px'}
-              value={dateOfBirth.birthDay}
-            />
-            <Input
-              name="birthMonth"
-              type="number"
-              showAlert={!requireds.dateOfBirth}
-              parentCallback={handleBirthdayChange}
-              placeholder="MM"
-              width={'35px'}
-              value={dateOfBirth.birthMonth}
-            />
-            <Input
-              name="birthYear"
-              type="number"
-              showAlert={!requireds.dateOfBirth}
-              parentCallback={handleBirthdayChange}
-              placeholder="YYYY"
-              width={'50px'}
-              value={dateOfBirth.birthYear}
-            />
+            <InputsBirthDay />
           </S.Field>
 
           <S.Button onClick={(e) => handleNext(e)}>{'Next >'}</S.Button>

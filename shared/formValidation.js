@@ -50,15 +50,18 @@ module.exports = Object.freeze({
   
     return value.length < 5 && year < new Date().getFullYear() - 18
   },
-  isDateValid: (dateStr) => {
-    dateStr = dateStr.substr(3, 2) + '/' + dateStr.substr(0, 2) + '/' + dateStr.substr(6, 4);
-
+  isDateValid: (dateStr, callbackOne, callbackTwo) => {
+    const reversed = callbackOne(dateStr)
+    callbackTwo(reversed)
+  },
+  isDateValidNotReversed: (dateStr, callback) => callback(dateStr),
+  reverseDateString: (dateStr) => dateStr.substr(3, 2) + '/' + dateStr.substr(0, 2) + '/' + dateStr.substr(6, 4),
+  validateFullDate: (dateStr) => {
     const dateObj = new Date(dateStr)
     const actualDate = dateObj.getDate()
     const actualMonth = dateObj.getMonth() + 1
     const actualFullYear = dateObj.getFullYear()
     const [strMonth, strDate, strFullYear] = dateStr.split('/').map(Number)
-  
     return (
       strMonth === actualMonth &&
       strDate === actualDate &&

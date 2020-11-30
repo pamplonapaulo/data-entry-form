@@ -36,8 +36,10 @@ module.exports = {
     if (!validations.isGenderValid(gender))
       errors.push('Gender')
 
-    if (!validations.isDateValid(dateOfBirth))
+    if (!validations.isDateValidNotReversed(dateOfBirth, validations.validateFullDate)) {
+      console.log(dateOfBirth)
       errors.push('Date of birth')
+    }
 
     if (!validations.isTextValid(comments, 0, 5000) && comments.length !== 0)
       errors.push('Comments')
