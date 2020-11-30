@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import api from 'services/api'
-import { User } from 'types/api'
 import { useRequireds, useUser } from 'contexts'
 
 import Input from 'components/Input'
 import InputsBirthDay from 'components/InputsBirthDay'
+import UsersTable from 'components/UsersTable'
 
 import * as S from './styles'
 
@@ -83,8 +83,8 @@ const Main = () => {
     try {
       const response = await api.post('users', userData)
       console.log(response)
-      setStep(4)
       handleGet()
+      setStep(4)
     } catch (err) {
       alert(`Error on saving, please try again.`)
       console.log(err)
@@ -251,34 +251,7 @@ const Main = () => {
 
       {step == 4 && (
         <S.Display>
-          <table>
-            <thead>
-              <S.TableRow>
-                <S.TableHeader>Id</S.TableHeader>
-                <S.TableHeader>First name</S.TableHeader>
-                <S.TableHeader>Surname</S.TableHeader>
-                <S.TableHeader>Email</S.TableHeader>
-                <S.TableHeader>Phone</S.TableHeader>
-                <S.TableHeader>Gender</S.TableHeader>
-                <S.TableHeader>Date of birth</S.TableHeader>
-                <S.TableHeader>Comments</S.TableHeader>
-              </S.TableRow>
-            </thead>
-            <tbody>
-              {users.map((user: User) => (
-                <S.TableRow key={user.id}>
-                  <S.TableData>{user.id}</S.TableData>
-                  <S.TableData>{user.firstName}</S.TableData>
-                  <S.TableData>{user.surname}</S.TableData>
-                  <S.TableData>{user.email}</S.TableData>
-                  <S.TableData>{user.phone}</S.TableData>
-                  <S.TableData>{user.gender}</S.TableData>
-                  <S.TableData>{user.dateOfBirth}</S.TableData>
-                  <S.TableData>{user.comments}</S.TableData>
-                </S.TableRow>
-              ))}
-            </tbody>
-          </table>
+          <UsersTable data={users} />
         </S.Display>
       )}
       {statusMessage.length > 0 && (
