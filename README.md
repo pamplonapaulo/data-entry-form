@@ -2,7 +2,6 @@
 
 ### pendencies:
 
-- Separate all date fields in a BirthDay component
 - Custom React Hooks
 - OWASP standards, where applicable – https://owasp.org/
 - Google ReCAPTCHA
