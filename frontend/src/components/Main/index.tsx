@@ -12,10 +12,11 @@ import {
   phoneMask,
   isPhoneValid,
   isGenderValid,
-  isDateValid,
   isDayValid,
   isMonthValid,
-  isYearValid
+  isYearValid,
+  validateFullDate,
+  isDateValidNotReversed
 } from '../../../../shared/formValidation'
 
 const Main = () => {
@@ -99,6 +100,7 @@ const Main = () => {
   }
 
   async function handlePost() {
+    console.log('handle post')
     console.log(userData)
     try {
       const response = await api.post('users', userData)
@@ -112,8 +114,12 @@ const Main = () => {
   }
 
   async function handleGet() {
+    console.log('handle post')
+
     try {
       const response = await api.get('users')
+      console.log(response.data)
+
       setUsers(response.data)
     } catch (err) {
       alert('Error on loading')
@@ -233,7 +239,8 @@ const Main = () => {
     }
     const newString = reorderBirthString(mountBirthString(bDay))
     const isValid =
-      isDateValid(mountBirthString(bDay)) && newString.length === 10
+      isDateValidNotReversed(newString, validateFullDate) &&
+      newString.length === 10
 
     if (isValid)
       setUserData({
