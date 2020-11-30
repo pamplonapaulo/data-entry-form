@@ -7,6 +7,8 @@
 - OWASP standards, where applicable – https://owasp.org/
 - Google ReCAPTCHA
 - Automated Tests (Jest)
+- Style error messages
+- Style table of Uers
 
 ### commit history:
 
