@@ -10,6 +10,7 @@ module.exports = {
   },
 
   async create(request, response) {
+
     const { 
       firstName,
       surname,
@@ -21,18 +22,29 @@ module.exports = {
 
     const id = generateUniqueId();
 
-    if (
-      validations.isTextValid(surname, 100) &&
-      validations.isEmailValid(email) &&
-      validations.isPhoneValid(phone) &&
-      validations.isGenderValid(gender) &&
-      validations.isDateValid(dateOfBirth) &&
-      validations.isTextValid(comments, 5000) &&
-      validations.isTextValid(firstName, 100)
-    ) {
-      console.log(' Form fields validated with success! ')
-    } else {
-      console.log(' Validation error! Register aborted.')
+    let errors = []
+
+    if (!validations.isTextValid(firstName, 2, 100))
+      errors.push('First Name')
+
+    if (!validations.isTextValid(surname, 2, 100))
+      errors.push('Surname')
+
+    if (!validations.isEmailValid(email))
+      errors.push('Email')
+
+    if (!validations.isGenderValid(gender))
+      errors.push('Gender')
+
+    if (!validations.isDateValid(dateOfBirth))
+      errors.push('Date of birth')
+
+    if (!validations.isTextValid(comments, 0, 5000) && comments.length !== 0)
+      errors.push('Comments')
+
+    if (errors.length !== 0) {
+      console.log(' Aborted. Found errors: ')
+      errors.forEach(err => console.log(err));
       return
     }
 

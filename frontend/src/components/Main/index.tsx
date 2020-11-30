@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import api from 'services/api'
-import { User } from 'types/api'
+import { User, BDay } from 'types/api'
 
 import Input from 'components/Input'
 
@@ -37,20 +37,13 @@ const Main = () => {
   })
   const [users, setUsers] = useState([])
   const [requireds, setRequireds] = useState({
-    firstName: false,
-    surname: false,
-    email: false,
-    phone: false,
-    gender: false,
-    dateOfBirth: false
+    firstName: true,
+    surname: true,
+    email: true,
+    phone: true,
+    gender: true,
+    dateOfBirth: true
   })
-
-  const dateValidation = (bool: boolean) => {
-    setRequireds({
-      ...requireds,
-      dateOfBirth: bool
-    })
-  }
 
   const genders = [
     'Select Gender',
@@ -106,6 +99,7 @@ const Main = () => {
   }
 
   async function handlePost() {
+    console.log(userData)
     try {
       const response = await api.post('users', userData)
       console.log(response)
@@ -113,58 +107,25 @@ const Main = () => {
       handleGet()
     } catch (err) {
       alert(`Error on saving, please try again.`)
+      console.log(err)
     }
   }
 
   async function handleGet() {
     try {
       const response = await api.get('users')
-      console.log('Loading data...')
-      console.log(response)
       setUsers(response.data)
     } catch (err) {
       alert('Error on loading')
     }
   }
 
-  const handleInputChange = (
+  const handleBirthdayChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
     const target = e.target
-
-    if (target.name === 'firstName' && isTextValid(target.value, 100)) {
-      setRequireds({ ...requireds, firstName: true })
-      updateState(target)
-    }
-
-    if (target.name === 'surname' && isTextValid(target.value, 100)) {
-      updateState(target)
-
-      if (target.value.length >= 2) {
-        setRequireds({ ...requireds, surname: true })
-      } else {
-        setRequireds({ ...requireds, surname: false })
-      }
-    }
-
-    if (target.name === 'email' && isEmailValid(target.value)) {
-      setRequireds({ ...requireds, email: true })
-      updateState(target)
-    }
-
-    if (target.name === 'gender' && isGenderValid(target.value)) {
-      setRequireds({ ...requireds, gender: true })
-      updateState(target)
-    }
-
-    if (target.name === 'phone') {
-      updateState(target, phoneMask(target.value))
-      isPhoneValid(target.value)
-        ? setRequireds({ ...requireds, phone: true })
-        : setRequireds({ ...requireds, phone: false })
-    }
 
     if (target.name === 'birthDay' && isDayValid(target.value))
       updateBirthState(target)
@@ -174,9 +135,58 @@ const Main = () => {
 
     if (target.name === 'birthYear' && isYearValid(target.value))
       updateBirthState(target)
+  }
 
-    if (target.name === 'comments' && isTextValid(target.value, 5000))
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const target = e.target
+
+    if (target.name === 'phone') {
+      updateState(target, phoneMask(target.value))
+    } else {
       updateState(target)
+    }
+
+    handleValidator(e)
+  }
+
+  const handleValidator = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const target = e.target
+
+    let bool
+
+    if (
+      target.name === 'firstName' ||
+      target.name === 'surname' ||
+      target.name === 'comments'
+    ) {
+      bool = isTextValid(
+        target.value,
+        target.name === 'comments' ? 0 : 2,
+        target.name === 'comments' ? 5000 : 100
+      )
+    }
+
+    if (target.name === 'email') {
+      bool = isEmailValid(target.value)
+    }
+
+    if (target.name === 'phone') {
+      bool = isPhoneValid(target.value)
+    }
+
+    if (target.name === 'gender') {
+      bool = isGenderValid(target.value)
+    }
+
+    setRequireds({ ...requireds, [target.name]: bool })
   }
 
   const updateState = (
@@ -201,57 +211,37 @@ const Main = () => {
     updateDateOfBirth(target.name, target.value)
   }
 
-  const mountDateString = (day: string, month: string, year: string) => {
-    return `${month.length == 2 ? month : '0' + month}/${
-      day.length == 2 ? day : '0' + day
-    }/${year}`
+  const mountBirthString = (date: BDay) => {
+    const dateString = `${
+      date.birthDay.length == 2 ? date.birthDay : '0' + date.birthDay
+    }/${
+      date.birthMonth.length == 2 ? date.birthMonth : '0' + date.birthMonth
+    }/${date.birthYear}`
+
+    return dateString
   }
 
+  const reorderBirthString = (date: string) =>
+    date.substr(3, 2) + '/' + date.substr(0, 2) + '/' + date.substr(6, 4)
+
   const updateDateOfBirth = (dateField: string, dateValue: string) => {
-    let dateString = ''
-
-    if (dateField === 'birthDay') {
-      dateString = mountDateString(
-        dateValue,
-        dateOfBirth.birthMonth,
-        dateOfBirth.birthYear
-      )
+    const bDay = {
+      birthDay: dateOfBirth.birthDay,
+      birthMonth: dateOfBirth.birthMonth,
+      birthYear: dateOfBirth.birthYear,
+      [dateField]: dateValue
     }
+    const newString = reorderBirthString(mountBirthString(bDay))
+    const isValid =
+      isDateValid(mountBirthString(bDay)) && newString.length === 10
 
-    if (dateField === 'birthMonth') {
-      dateString = mountDateString(
-        dateOfBirth.birthDay,
-        dateValue,
-        dateOfBirth.birthYear
-      )
-    }
-
-    if (dateField === 'birthYear') {
-      dateString = mountDateString(
-        dateOfBirth.birthDay,
-        dateOfBirth.birthMonth,
-        dateValue
-      )
-    }
-
-    const newString =
-      dateString.substr(3, 2) +
-      '/' +
-      dateString.substr(0, 2) +
-      '/' +
-      dateString.substr(6, 4)
-
-    const isValid = isDateValid(newString)
-
-    if (newString.length == 10 && isValid) {
-      dateValidation(true)
+    if (isValid)
       setUserData({
         ...userData,
         dateOfBirth: newString
       })
-    } else {
-      dateValidation(false)
-    }
+
+    setRequireds({ ...requireds, dateOfBirth: isValid })
   }
 
   return (
@@ -265,6 +255,8 @@ const Main = () => {
               autoFocus={true}
               name="firstName"
               type="text"
+              showAlert={!requireds.firstName}
+              parentBlurCallback={handleValidator}
               parentCallback={handleInputChange}
               value={userData.firstName}
             />
@@ -272,6 +264,8 @@ const Main = () => {
               label="Surname"
               name="surname"
               type="text"
+              showAlert={!requireds.surname}
+              parentBlurCallback={handleValidator}
               parentCallback={handleInputChange}
               value={userData.surname}
             />
@@ -282,6 +276,8 @@ const Main = () => {
               label="Email Address"
               name="email"
               type="email"
+              showAlert={!requireds.email}
+              parentBlurCallback={handleValidator}
               parentCallback={handleInputChange}
               width={'300px'}
             />
@@ -316,7 +312,8 @@ const Main = () => {
               label="Date of birth"
               name="birthDay"
               type="number"
-              parentCallback={handleInputChange}
+              showAlert={!requireds.dateOfBirth}
+              parentCallback={handleBirthdayChange}
               placeholder="DD"
               width={'35px'}
               value={dateOfBirth.birthDay}
@@ -324,7 +321,8 @@ const Main = () => {
             <Input
               name="birthMonth"
               type="number"
-              parentCallback={handleInputChange}
+              showAlert={!requireds.dateOfBirth}
+              parentCallback={handleBirthdayChange}
               placeholder="MM"
               width={'35px'}
               value={dateOfBirth.birthMonth}
@@ -332,7 +330,8 @@ const Main = () => {
             <Input
               name="birthYear"
               type="number"
-              parentCallback={handleInputChange}
+              showAlert={!requireds.dateOfBirth}
+              parentCallback={handleBirthdayChange}
               placeholder="YYYY"
               width={'50px'}
               value={dateOfBirth.birthYear}

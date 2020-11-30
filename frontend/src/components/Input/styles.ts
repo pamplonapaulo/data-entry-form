@@ -16,11 +16,16 @@ export const Label = styled.label`
   white-space: nowrap;
 `
 
-export const Input = styled.input<{ customWidth?: string }>`
+export const Input = styled.input<{
+  customWidth?: string
+  showAlert?: boolean
+}>`
   border-color: #ccc;
   border-radius: 10px;
   border-width: 0;
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.6);
+  box-shadow: ${(p) =>
+    p.showAlert ? 'inset 0 0 6px red' : 'inset 0 0 6px rgba(0, 0, 0, 0.6);'};
+  background-image: radial-gradient(transparent, transparent, #ccc);
   font-size: 1.4rem;
   height: 35px;
   margin-right: 5px;

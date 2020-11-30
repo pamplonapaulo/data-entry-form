@@ -8,7 +8,7 @@ exports.up = function(knex) {
     table.string('phone').notNullable();
     table.string('gender').notNullable();
     table.string('dateOfBirth').notNullable();
-    table.string('comments').notNullable();
+    table.string('comments').nullable();
   })
 };
 

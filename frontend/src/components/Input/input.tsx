@@ -16,7 +16,13 @@ type Props = {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => void
+  parentBlurCallback?: (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => void
   width?: string
+  showAlert?: boolean
 }
 
 const Input = ({
@@ -29,7 +35,9 @@ const Input = ({
   value,
   autoFocus,
   parentCallback,
-  width
+  parentBlurCallback,
+  width,
+  showAlert
 }: Props) => (
   <>
     <S.InputWrapper customWidth={width}>
@@ -40,9 +48,11 @@ const Input = ({
           name={name}
           type={type}
           onChange={parentCallback}
+          onBlur={parentBlurCallback}
           value={value}
           placeholder={placeholder}
           customWidth={width}
+          showAlert={showAlert}
         />
       )}
 

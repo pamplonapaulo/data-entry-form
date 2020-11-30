@@ -1,8 +1,7 @@
 module.exports = Object.freeze({
   isEmailValid: (email) => /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email),
-  isTextValid: (text, length) => {
-    const regex = new RegExp(`^[a-z ,.'-]{0,` + length + '}', 'i')
-
+  isTextValid: (text, minLength, maxLength) => {
+    const regex = new RegExp(`^[a-z ,.'-]{` + minLength + `,` + maxLength + '}', 'i')
     return regex.test(text)
   },
   isGenderValid: (gender) => {

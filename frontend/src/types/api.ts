@@ -8,3 +8,9 @@ export type User = {
   dateOfBirth: string
   comments: string
 }
+
+export type BDay = {
+  birthDay: string
+  birthMonth: string
+  birthYear: string
+}
