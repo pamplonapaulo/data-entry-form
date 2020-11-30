@@ -6,8 +6,28 @@
 - OWASP standards, where applicable – https://owasp.org/
 - Google ReCAPTCHA
 - Automated Tests (Jest)
+- Style error messages
+- Style table of Uers
 
 ### commit history:
+
+  commit e5d0538be43cd6deed26b1936cce2671b5057685<br/>
+  Date:   Mon Nov 30 20:10
+  
+  commit da098d94021ec0ab34aff933f78bb49509535e05<br/>
+  Date:   Mon Nov 30 20:09
+
+  commit 9fc247356311b0e7ff80a4085ee231d7cc07bc4d<br/>
+  Date:   Mon Nov 30 20:08
+
+  commit 16f17546463cd72db954b4f9568f23210cf8c583<br/>
+  Date:   Mon Nov 30 20:07
+
+  commit 53dc8b35aa02c2fe758b1ba324407b6c68bdddf0<br/>
+  Date:   Mon Nov 30 12:18
+
+  - commit 27e31160159d2ddd50b03cad6796abe2df48156c<br/>
+  Date:   Mon Nov 30 12:16
 
   - commit 1a49f054cd7f7acc2602cd7400ac1590de7b55d0<br/>
   Date:   Mon Nov 30 11:09
