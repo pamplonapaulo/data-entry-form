@@ -40,9 +40,7 @@ const Main = () => {
   const handleNext = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
 
-    if (step == 3) {
-      handlePost()
-    }
+    if (step == 3) handlePost()
 
     if (
       step == 2 &&
@@ -172,6 +170,7 @@ const Main = () => {
               label="First Name"
               autoFocus={true}
               name="firstName"
+              widthSmall="48%"
               type="text"
               showAlert={!requireds.firstName}
               parentBlurCallback={handleValidator}
@@ -181,6 +180,7 @@ const Main = () => {
             <Input
               label="Surname"
               name="surname"
+              widthSmall="48%"
               type="text"
               showAlert={!requireds.surname}
               parentBlurCallback={handleValidator}
@@ -193,6 +193,7 @@ const Main = () => {
             <Input
               label="Email Address"
               name="email"
+              widthSmall="100%"
               type="email"
               showAlert={!requireds.email}
               parentBlurCallback={handleValidator}
@@ -211,6 +212,7 @@ const Main = () => {
           <S.Field>
             <Input
               label="Telephone number"
+              widthSmall="48%"
               name="phone"
               parentCallback={handleInputChange}
               value={userData.phone}
@@ -218,6 +220,7 @@ const Main = () => {
             <Input
               label="Gender"
               elementType="select"
+              widthSmall="48%"
               name="gender"
               options={genders}
               parentCallback={handleInputChange}
@@ -241,6 +244,7 @@ const Main = () => {
               label="Comments"
               elementType="textArea"
               name="comments"
+              widthSmall="100%"
               parentCallback={handleInputChange}
             />
           </S.Field>

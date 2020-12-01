@@ -18,7 +18,7 @@ export const Step = styled.div`
   background-color: #fff;
   overflow: hidden;
   padding: 5px;
-  width: 75%;
+  width: 100%;
 
   &&:nth-of-type(1) {
     border-radius: 7px 7px 0 0;
@@ -26,6 +26,10 @@ export const Step = styled.div`
 
   &&:nth-of-type(3) {
     border-radius: 0 0 7px 7px;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    width: 75%;
   }
 `
 
@@ -58,8 +62,13 @@ export const Field = styled.fieldset`
   border: none;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   margin-top: 10px;
   padding: 0 10px;
+
+  @media only screen and (min-width: 1024px) {
+    justify-content: space-between;
+  }
 `
 
 export const Button = styled.button`
