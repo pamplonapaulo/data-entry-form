@@ -21,6 +21,7 @@ type Props = {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => void
+  widthSmall?: string
   width?: string
   showAlert?: boolean
 }
@@ -36,11 +37,12 @@ const Input = ({
   autoFocus,
   parentCallback,
   parentBlurCallback,
+  widthSmall,
   width,
   showAlert
 }: Props) => (
   <>
-    <S.InputWrapper customWidth={width}>
+    <S.InputWrapper widthSmall={widthSmall} customWidth={width} dataName={name}>
       <S.Label>{label ? label : ' '}</S.Label>
       {!elementType && (
         <S.Input

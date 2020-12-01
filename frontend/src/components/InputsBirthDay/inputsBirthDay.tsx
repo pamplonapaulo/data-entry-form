@@ -92,6 +92,7 @@ const InputsBirthDay = () => {
         showAlert={!requireds.dateOfBirth}
         parentCallback={handleBirthdayChange}
         placeholder="DD"
+        widthSmall="23%"
         width={'35px'}
         value={dateOfBirth.birthDay}
       />
@@ -101,6 +102,7 @@ const InputsBirthDay = () => {
         showAlert={!requireds.dateOfBirth}
         parentCallback={handleBirthdayChange}
         placeholder="MM"
+        widthSmall="23%"
         width={'35px'}
         value={dateOfBirth.birthMonth}
       />
@@ -110,6 +112,7 @@ const InputsBirthDay = () => {
         showAlert={!requireds.dateOfBirth}
         parentCallback={handleBirthdayChange}
         placeholder="YYYY"
+        widthSmall="48%"
         width={'50px'}
         value={dateOfBirth.birthYear}
       />

@@ -1,10 +1,19 @@
 import styled from 'styled-components'
 
-export const InputWrapper = styled.div<{ customWidth?: string }>`
+export const InputWrapper = styled.div<{
+  widthSmall?: string
+  customWidth?: string
+  dataName: string
+}>`
   display: flex;
   flex-direction: column;
-  margin-right: 5px;
-  width: ${(p) => (p.customWidth ? p.customWidth : 'auto')};
+  //width: ${(p) => (p.dataName == 'email' ? '100%' : 'calc(50% - 5px)')};
+  width: ${(p) => (p.widthSmall ? p.widthSmall : 'auto')};
+
+  @media only screen and (min-width: 1024px) {
+    margin-right: 5px;
+    width: ${(p) => (p.customWidth ? p.customWidth : 'auto')};
+  }
 `
 
 export const Label = styled.label`
@@ -31,7 +40,7 @@ export const Input = styled.input<{
   margin-right: 5px;
   outline-width: 0;
   padding: 10px;
-  width: ${(p) => (p.customWidth ? p.customWidth : 'auto')};
+  width: 100%;
 
   &::-webkit-input-placeholder {
     letter-spacing: 1.5px;
@@ -55,24 +64,48 @@ export const Input = styled.input<{
     text-align: center;
     -moz-appearance: textfield;
   }
+
+  @media only screen and (min-width: 1024px) {
+    width: ${(p) => (p.customWidth ? p.customWidth : 'auto')};
+  }
 `
 
 export const SelectWrapper = styled.div`
   position: relative;
 
   &:after {
+    background-image: radial-gradient(transparent, transparent, #ccc);
     content: 'V';
     font-family: sans-serif;
     font-weight: 800;
     position: absolute;
-    top: 13px;
+    top: 0;
     right: 10px;
     z-index: 5;
-    height: auto;
+    height: 100%;
     font-size: 11px;
     color: #727272;
-    transform: translateY(-30%);
-    padding-right: 6px;
+    padding-right: 3px;
+    background: red;
+    transform: translate(9px, 0);
+    width: 15px;
+    border-radius: 0 10px 10px 0;
+    background: #fff;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    // @media only screen and (min-width: 1024px) {
+    //   top: 13px;
+    //   right: 10px;
+    //   z-index: 5;
+    //   height: auto;
+    //   font-size: 11px;
+    //   color: #727272;
+    //   transform: translateY(-30%);
+    //   padding-right: 6px;
+    // }
   }
 `
 
@@ -89,6 +122,7 @@ export const Select = styled.select`
   margin-right: 5px;
   padding-left: 1rem;
   cursor: pointer;
+  width: 100%;
 `
 
 export const TextArea = styled.textarea`
@@ -100,5 +134,9 @@ export const TextArea = styled.textarea`
   height: 150px;
   outline-width: 0;
   padding: 10px;
-  width: 300px;
+  width: 100%;
+
+  @media only screen and (min-width: 1024px) {
+    width: 300px;
+  }
 `
