@@ -68,7 +68,7 @@ const Input = ({
       )}
 
       {elementType === 'select' && (
-        <S.SelectWrapper>
+        <S.SelectWrapper showAlert={showAlert}>
           <S.Select
             defaultValue={`Select Gender`}
             name="gender"
