@@ -5,6 +5,7 @@ import { useRequireds, useUser } from 'contexts'
 import Input from 'components/Input'
 import InputsBirthDay from 'components/InputsBirthDay'
 import UsersTable from 'components/UsersTable'
+import StatusMessage from 'components/StatusMessage'
 
 import * as S from './styles'
 
@@ -18,7 +19,7 @@ import {
 
 const Main = () => {
   const [step, setStep] = useState(1)
-  const [statusMessage, setStatusMessage] = useState('')
+  const [statusMessage, setStatusMessage] = useState(false)
 
   const { userData, setUserData } = useUser()
 
@@ -40,7 +41,11 @@ const Main = () => {
   const handleNext = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
 
-    if (step == 3 && requireds.comments >= 0) handlePost()
+    if (step == 3 && requireds.comments != -1) {
+      handlePost()
+    } else if (step == 3) {
+      setStatusMessage(true)
+    }
 
     if (
       step == 2 &&
@@ -48,16 +53,10 @@ const Main = () => {
       requireds.dateOfBirth === 1 &&
       requireds.phone === 1
     ) {
-      setStatusMessage('')
+      setStatusMessage(false)
       setStep(3)
     } else if (step == 2) {
-      setStatusMessage(
-        `Fields with error:
-          ${requireds.gender < 1 ? ' Gender ' : ''}
-          ${requireds.phone < 1 ? ' Telephone number ' : ''}
-          ${requireds.dateOfBirth < 1 ? ' Date Of Birth ' : ''}
-          `
-      )
+      setStatusMessage(true)
       setRequireds({
         ...requireds,
         gender: requireds.gender < 1 ? -1 : 1,
@@ -72,16 +71,10 @@ const Main = () => {
       requireds.surname === 1 &&
       requireds.email === 1
     ) {
-      setStatusMessage('')
+      setStatusMessage(false)
       setStep(2)
     } else if (step == 1) {
-      setStatusMessage(
-        `Fields with error:
-          ${requireds.firstName < 1 ? ' First Name ' : ''}
-          ${requireds.surname < 1 ? ' Surname ' : ''}
-          ${requireds.email < 1 ? ' Email ' : ''}
-          `
-      )
+      setStatusMessage(true)
       setRequireds({
         ...requireds,
         firstName: requireds.firstName < 1 ? -1 : 1,
@@ -275,11 +268,8 @@ const Main = () => {
           <UsersTable data={users} />
         </S.Display>
       )}
-      {statusMessage.length > 0 && (
-        <S.Display>
-          <S.ErrorMessage>{statusMessage}</S.ErrorMessage>
-        </S.Display>
-      )}
+
+      {statusMessage && <StatusMessage requireds={requireds} />}
     </S.Wrapper>
   )
 }

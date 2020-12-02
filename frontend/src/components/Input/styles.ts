@@ -7,7 +7,6 @@ export const InputWrapper = styled.div<{
 }>`
   display: flex;
   flex-direction: column;
-  //width: ${(p) => (p.dataName == 'email' ? '100%' : 'calc(50% - 5px)')};
   width: ${(p) => (p.widthSmall ? p.widthSmall : 'auto')};
 
   @media only screen and (min-width: 1024px) {
@@ -71,7 +70,9 @@ export const Input = styled.input<{
   }
 `
 
-export const SelectWrapper = styled.div`
+export const SelectWrapper = styled.div<{
+  showAlert?: number
+}>`
   position: relative;
 
   &:after {
@@ -92,7 +93,8 @@ export const SelectWrapper = styled.div`
     width: 15px;
     border-radius: 0 10px 10px 0;
     background: #fff;
-    box-shadow: inset -2px 0 6px rgba(0, 0, 0, 0.6);
+    box-shadow: inset 0 0 6px
+    ${(p) => (p.showAlert === -1 ? 'red' : 'rgba(0, 0, 0, 0.6);')};
     display: flex;
     justify-content: center;
     align-items: center;
