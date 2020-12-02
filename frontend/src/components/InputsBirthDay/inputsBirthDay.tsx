@@ -67,7 +67,7 @@ const InputsBirthDay = () => {
         dateOfBirth: newString
       })
 
-    setRequireds({ ...requireds, dateOfBirth: isValid })
+    setRequireds({ ...requireds, dateOfBirth: isValid ? 1 : -1 })
   }
 
   const reorderBirthString = (date: string) =>
@@ -89,31 +89,31 @@ const InputsBirthDay = () => {
         label="Date of birth"
         name="birthDay"
         type="number"
-        showAlert={!requireds.dateOfBirth}
+        showAlert={requireds.dateOfBirth}
         parentCallback={handleBirthdayChange}
         placeholder="DD"
         widthSmall="23%"
-        width={'35px'}
+        width={'45px'}
         value={dateOfBirth.birthDay}
       />
       <Input
         name="birthMonth"
         type="number"
-        showAlert={!requireds.dateOfBirth}
+        showAlert={requireds.dateOfBirth}
         parentCallback={handleBirthdayChange}
         placeholder="MM"
         widthSmall="23%"
-        width={'35px'}
+        width={'45px'}
         value={dateOfBirth.birthMonth}
       />
       <Input
         name="birthYear"
         type="number"
-        showAlert={!requireds.dateOfBirth}
+        showAlert={requireds.dateOfBirth}
         parentCallback={handleBirthdayChange}
         placeholder="YYYY"
         widthSmall="48%"
-        width={'50px'}
+        width={'60px'}
         value={dateOfBirth.birthYear}
       />
     </>

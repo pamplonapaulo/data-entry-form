@@ -40,40 +40,54 @@ const Main = () => {
   const handleNext = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
 
-    if (step == 3) handlePost()
+    if (step == 3 && requireds.comments >= 0) handlePost()
 
     if (
       step == 2 &&
-      requireds.gender === true &&
-      requireds.dateOfBirth === true &&
-      requireds.phone === true
+      requireds.gender === 1 &&
+      requireds.dateOfBirth === 1 &&
+      requireds.phone === 1
     ) {
+      setStatusMessage('')
       setStep(3)
     } else if (step == 2) {
       setStatusMessage(
         `Fields with error:
-          ${!requireds.gender ? ' Gender ' : ''}
-          ${!requireds.phone ? ' Telephone number ' : ''}
-          ${!requireds.dateOfBirth ? ' Date Of Birth ' : ''}
+          ${requireds.gender < 1 ? ' Gender ' : ''}
+          ${requireds.phone < 1 ? ' Telephone number ' : ''}
+          ${requireds.dateOfBirth < 1 ? ' Date Of Birth ' : ''}
           `
       )
+      setRequireds({
+        ...requireds,
+        gender: requireds.gender < 1 ? -1 : 1,
+        phone: requireds.phone < 1 ? -1 : 1,
+        dateOfBirth: requireds.dateOfBirth < 1 ? -1 : 1
+      })
     }
 
     if (
       step == 1 &&
-      requireds.firstName === true &&
-      requireds.surname === true &&
-      requireds.email === true
+      requireds.firstName === 1 &&
+      requireds.surname === 1 &&
+      requireds.email === 1
     ) {
+      setStatusMessage('')
       setStep(2)
     } else if (step == 1) {
       setStatusMessage(
         `Fields with error:
-          ${!requireds.firstName ? ' First Name ' : ''}
-          ${!requireds.surname ? ' Surname ' : ''}
-          ${!requireds.email ? ' Email ' : ''}
+          ${requireds.firstName < 1 ? ' First Name ' : ''}
+          ${requireds.surname < 1 ? ' Surname ' : ''}
+          ${requireds.email < 1 ? ' Email ' : ''}
           `
       )
+      setRequireds({
+        ...requireds,
+        firstName: requireds.firstName < 1 ? -1 : 1,
+        surname: requireds.surname < 1 ? -1 : 1,
+        email: requireds.email < 1 ? -1 : 1
+      })
     }
   }
 
@@ -127,27 +141,23 @@ const Main = () => {
       target.name === 'firstName' ||
       target.name === 'surname' ||
       target.name === 'comments'
-    ) {
+    )
       bool = isTextValid(
         target.value,
         target.name === 'comments' ? 0 : 2,
         target.name === 'comments' ? 5000 : 100
       )
-    }
 
-    if (target.name === 'email') {
-      bool = isEmailValid(target.value)
-    }
+    if (target.name === 'email') bool = isEmailValid(target.value)
 
-    if (target.name === 'phone') {
-      bool = isPhoneValid(target.value)
-    }
+    if (target.name === 'phone') bool = isPhoneValid(target.value)
 
-    if (target.name === 'gender') {
-      bool = isGenderValid(target.value)
-    }
+    if (target.name === 'gender') bool = isGenderValid(target.value)
 
-    setRequireds({ ...requireds, [target.name]: bool })
+    console.log(target.name)
+    console.log(bool)
+
+    setRequireds({ ...requireds, [target.name]: bool ? 1 : -1 })
   }
 
   const updateState = (
@@ -171,8 +181,9 @@ const Main = () => {
               autoFocus={true}
               name="firstName"
               widthSmall="48%"
+              width="auto"
               type="text"
-              showAlert={!requireds.firstName}
+              showAlert={requireds.firstName}
               parentBlurCallback={handleValidator}
               parentCallback={handleInputChange}
               value={userData.firstName}
@@ -181,8 +192,9 @@ const Main = () => {
               label="Surname"
               name="surname"
               widthSmall="48%"
+              width="70%"
               type="text"
-              showAlert={!requireds.surname}
+              showAlert={requireds.surname}
               parentBlurCallback={handleValidator}
               parentCallback={handleInputChange}
               value={userData.surname}
@@ -195,7 +207,7 @@ const Main = () => {
               name="email"
               widthSmall="100%"
               type="email"
-              showAlert={!requireds.email}
+              showAlert={requireds.email}
               parentBlurCallback={handleValidator}
               parentCallback={handleInputChange}
               width={'300px'}
@@ -214,6 +226,7 @@ const Main = () => {
               label="Telephone number"
               widthSmall="48%"
               name="phone"
+              showAlert={requireds.phone}
               parentCallback={handleInputChange}
               value={userData.phone}
             />
@@ -223,6 +236,7 @@ const Main = () => {
               widthSmall="48%"
               name="gender"
               options={genders}
+              showAlert={requireds.gender}
               parentCallback={handleInputChange}
               value={userData.phone}
             />
@@ -243,9 +257,12 @@ const Main = () => {
             <Input
               label="Comments"
               elementType="textArea"
+              type="text"
               name="comments"
               widthSmall="100%"
+              showAlert={requireds.comments}
               parentCallback={handleInputChange}
+              value={userData.comments}
             />
           </S.Field>
 
@@ -260,7 +277,7 @@ const Main = () => {
       )}
       {statusMessage.length > 0 && (
         <S.Display>
-          <h1>{statusMessage}</h1>
+          <S.ErrorMessage>{statusMessage}</S.ErrorMessage>
         </S.Display>
       )}
     </S.Wrapper>

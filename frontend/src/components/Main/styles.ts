@@ -67,7 +67,7 @@ export const Field = styled.fieldset`
   padding: 0 10px;
 
   @media only screen and (min-width: 1024px) {
-    justify-content: space-between;
+    justify-content: end;
   }
 `
 
@@ -83,6 +83,7 @@ export const Button = styled.button`
   width: 100px;
   transition: all 0.2s ease;
   background-color: #655bb4;
+  outline: none;
 
   &:hover {
     background-color: #28262c;
@@ -90,10 +91,10 @@ export const Button = styled.button`
 `
 
 export const Display = styled.section`
-  background-color: #28262c;
   margin-top: 50px;
   overflow-y: scroll;
   max-height: 400px;
+  width: 100%;
 
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -101,4 +102,18 @@ export const Display = styled.section`
   &::-webkit-scrollbar {
     display: none;
   }
+
+  @media only screen and (min-width: 1024px) {
+    width: 75%;
+  }
+`
+
+export const ErrorMessage = styled.h1`
+  padding: 10px;
+  border-radius: 10px;
+  background: #fff;
+  font-weight: 100;
+  font-size: 2.5rem;
+  border: 1px solid red;
+  color: red;
 `
