@@ -27,15 +27,16 @@ export const Label = styled.label`
 
 export const Input = styled.input<{
   customWidth?: string
-  showAlert?: boolean
+  showAlert?: number
 }>`
   border-color: #ccc;
   border-radius: 10px;
   border-width: 0;
-  box-shadow: ${(p) =>
-    p.showAlert ? 'inset 0 0 6px red' : 'inset 0 0 6px rgba(0, 0, 0, 0.6);'};
+  box-shadow: inset 0 0 6px
+    ${(p) => (p.showAlert === -1 ? 'red' : 'rgba(0, 0, 0, 0.6);')};
   background-image: radial-gradient(transparent, transparent, #ccc);
   font-size: 1.4rem;
+  font: 400 13.3333px Arial;
   height: 35px;
   margin-right: 5px;
   outline-width: 0;
@@ -43,7 +44,7 @@ export const Input = styled.input<{
   width: 100%;
 
   &::-webkit-input-placeholder {
-    letter-spacing: 1.5px;
+    letter-spacing: 1px !important;
     font-weight: 400;
     font-size: 11px;
     text-transform: uppercase;
@@ -91,25 +92,18 @@ export const SelectWrapper = styled.div`
     width: 15px;
     border-radius: 0 10px 10px 0;
     background: #fff;
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    box-shadow: inset -2px 0 6px rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
-
-    // @media only screen and (min-width: 1024px) {
-    //   top: 13px;
-    //   right: 10px;
-    //   z-index: 5;
-    //   height: auto;
-    //   font-size: 11px;
-    //   color: #727272;
-    //   transform: translateY(-30%);
-    //   padding-right: 6px;
-    // }
+    pointer-events: none;
   }
 `
 
-export const Select = styled.select`
+export const Select = styled.select<{
+  customWidth?: string
+  showAlert?: number
+}>`
   height: 35px;
   outline-width: 0;
   margin-right: 5px;
@@ -117,7 +111,8 @@ export const Select = styled.select`
   border-color: #ccc;
   border-radius: 10px;
   border-width: 1px;
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.6);
+  box-shadow: inset 0 0 6px
+    ${(p) => (p.showAlert === -1 ? 'red' : 'rgba(0, 0, 0, 0.6);')};
   outline-width: 0;
   margin-right: 5px;
   padding-left: 1rem;
@@ -125,12 +120,16 @@ export const Select = styled.select`
   width: 100%;
 `
 
-export const TextArea = styled.textarea`
+export const TextArea = styled.textarea<{
+  showAlert?: number
+}>`
   border-color: #ccc;
   border-radius: 10px;
   border-width: 1px;
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.6);
-  font-size: 1.5rem;
+  box-shadow: inset 0 0 6px
+    ${(p) => (p.showAlert === -1 ? 'red' : 'rgba(0, 0, 0, 0.6);')};
+  font-size: 1.4rem;
+  font: 400 13.3333px Arial;
   height: 150px;
   outline-width: 0;
   padding: 10px;

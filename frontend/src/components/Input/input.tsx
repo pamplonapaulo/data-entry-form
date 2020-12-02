@@ -23,12 +23,12 @@ type Props = {
   ) => void
   widthSmall?: string
   width?: string
-  showAlert?: boolean
+  showAlert?: number
 }
 
 const Input = ({
   label,
-  elementType,
+  elementType = 'input',
   name,
   type,
   options,
@@ -44,7 +44,7 @@ const Input = ({
   <>
     <S.InputWrapper widthSmall={widthSmall} customWidth={width} dataName={name}>
       <S.Label>{label ? label : ' '}</S.Label>
-      {!elementType && (
+      {elementType === 'input' && (
         <S.Input
           autoFocus={autoFocus}
           name={name}
@@ -59,7 +59,12 @@ const Input = ({
       )}
 
       {elementType === 'textArea' && (
-        <S.TextArea name={name} onChange={parentCallback} />
+        <S.TextArea
+          name={name}
+          value={value}
+          onChange={parentCallback}
+          showAlert={showAlert}
+        />
       )}
 
       {elementType === 'select' && (
@@ -68,6 +73,7 @@ const Input = ({
             defaultValue={`Select Gender`}
             name="gender"
             onChange={parentCallback}
+            showAlert={showAlert}
           >
             {options?.map((gender: string) => (
               <option

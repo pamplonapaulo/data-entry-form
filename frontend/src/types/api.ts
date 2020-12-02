@@ -16,10 +16,11 @@ export type BDay = {
 }
 
 export type Requireds = {
-  firstName: boolean
-  surname: boolean
-  email: boolean
-  phone: boolean
-  gender: boolean
-  dateOfBirth: boolean
+  firstName: number
+  surname: number
+  email: number
+  phone: number
+  gender: number
+  dateOfBirth: number
+  comments: number
 }

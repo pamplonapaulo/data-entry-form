@@ -31,12 +31,13 @@ type Props = {
 
 const RequiredsProvider = ({ children }: Props) => {
   const [requireds, setRequireds] = useState({
-    firstName: true,
-    surname: true,
-    email: true,
-    phone: true,
-    gender: true,
-    dateOfBirth: true
+    firstName: 0,
+    surname: 0,
+    email: 0,
+    phone: 0,
+    gender: 0,
+    dateOfBirth: 0,
+    comments: 0
   })
   return (
     <CtxProvider value={{ requireds, setRequireds }}>{children}</CtxProvider>
