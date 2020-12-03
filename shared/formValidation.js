@@ -10,20 +10,7 @@ module.exports = Object.freeze({
 
     return regex.test(text)
   },
-  isGenderValid: (gender) => {
-    const genders = [
-      'Male/ Man',
-      'Female/ Woman',
-      'TransMale/ TransMan',
-      'TransFemale/ TransWoman',
-      'Genderqueer/ Gender nonconforming',
-      'Something Else',
-      'Decline to Answer'
-    ]
-    const match = (el) => el === gender
-
-    return genders.some(match)
-  },
+  isGenderValid: (gender, genders) => genders.some((el) => el === gender),
   phoneMask: (value) =>
     value
       .replace(/[\D+]/g, '')

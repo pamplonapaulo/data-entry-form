@@ -54,7 +54,7 @@ const Step = ({
           <S.Field key={i}>
             {field.map((input: InputElement) => {
               if (input.elementType === 'birthday') {
-                return <InputsBirthDay />
+                return <InputsBirthDay key={input.elementType} />
               } else {
                 return (
                   <Input

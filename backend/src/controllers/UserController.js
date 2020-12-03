@@ -1,6 +1,7 @@
 const generateUniqueId = require('../utils/generateUniqueId');
 const connection = require('../database/connection');
 const validations = require('../../../shared/formValidation');
+const { genders } = require('../../../shared/diversity');
 
 module.exports = {
   async index(request, response) {
@@ -10,7 +11,6 @@ module.exports = {
   },
 
   async create(request, response) {
-
     const { 
       firstName,
       surname,
@@ -33,11 +33,10 @@ module.exports = {
     if (!validations.isEmailValid(email))
       errors.push('Email')
 
-    if (!validations.isGenderValid(gender))
+    if (!validations.isGenderValid(gender, genders))
       errors.push('Gender')
 
     if (!validations.isDateValidNotReversed(dateOfBirth, validations.validateFullDate)) {
-      console.log(dateOfBirth)
       errors.push('Date of birth')
     }
 
