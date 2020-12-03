@@ -8,7 +8,7 @@ type Props = {
   requireds: Requireds
 }
 
-const StatusMessage = ({ requireds }: Props) => {
+const ErrorMessage = ({ requireds }: Props) => {
   const formatFieldName = (name: string) => {
     const words = name.match(/[A-Z]+[^A-Z]*|[^A-Z]+/g)
     if (words) {
@@ -28,7 +28,7 @@ const StatusMessage = ({ requireds }: Props) => {
   return (
     <S.Display>
       {mapRequireds(requireds).length > 0 && (
-        <S.ErrorMessage>Fields with error:</S.ErrorMessage>
+        <S.Message>Fields with error:</S.Message>
       )}
 
       <S.List>
@@ -40,4 +40,4 @@ const StatusMessage = ({ requireds }: Props) => {
   )
 }
 
-export default StatusMessage
+export default ErrorMessage

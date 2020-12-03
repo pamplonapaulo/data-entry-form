@@ -24,3 +24,15 @@ export type Requireds = {
   dateOfBirth: number
   comments: number
 }
+
+export type InputElement = {
+  label: string
+  elementType: string
+  type?: string
+  name: string
+  widthSmall?: string
+  width?: string
+  options?: string[]
+}
+
+export type FieldElement = InputElement[]
