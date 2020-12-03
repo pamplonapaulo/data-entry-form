@@ -8,6 +8,8 @@ import Step from 'components/Step'
 
 import * as S from './styles'
 
+import { genders } from '../../../../shared/diversity'
+
 import {
   isEmailValid,
   isTextValid,
@@ -25,17 +27,6 @@ const Main = () => {
   const [users, setUsers] = useState([])
 
   const { requireds, setRequireds } = useRequireds()
-
-  const genders = [
-    'Select Gender',
-    'Male/ Man',
-    'Female/ Woman',
-    'TransMale/ TransMan',
-    'TransFemale/ TransWoman',
-    'Genderqueer/ Gender nonconforming',
-    'Something Else',
-    'Decline to Answer'
-  ]
 
   const handleNext = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
@@ -84,6 +75,7 @@ const Main = () => {
   }
 
   async function handlePost() {
+    console.log('try to post')
     try {
       const response = await api.post('users', userData)
       console.log(response)
@@ -144,7 +136,7 @@ const Main = () => {
 
     if (target.name === 'phone') bool = isPhoneValid(target.value)
 
-    if (target.name === 'gender') bool = isGenderValid(target.value)
+    if (target.name === 'gender') bool = isGenderValid(target.value, genders)
 
     setRequireds({ ...requireds, [target.name]: bool ? 1 : -1 })
   }
