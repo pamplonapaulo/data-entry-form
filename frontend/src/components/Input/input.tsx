@@ -42,13 +42,13 @@ const Input = ({
   showAlert
 }: Props) => (
   <>
-    <S.InputWrapper widthSmall={widthSmall} customWidth={width} dataName={name}>
+    <S.InputWrapper widthSmall={widthSmall} customWidth={width}>
       <S.Label>{label ? label : ' '}</S.Label>
       {elementType === 'input' && (
         <S.Input
           autoFocus={autoFocus}
           name={name}
-          type={type}
+          type={type ? type : 'text'}
           onChange={parentCallback}
           onBlur={parentBlurCallback}
           value={value}

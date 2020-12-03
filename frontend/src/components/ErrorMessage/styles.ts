@@ -18,7 +18,7 @@ export const Display = styled.section`
   }
 `
 
-export const ErrorMessage = styled.h1`
+export const Message = styled.h1`
   border-radius: 10px;
   color: red;
   font-weight: 100;

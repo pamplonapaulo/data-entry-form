@@ -2,10 +2,9 @@ import React, { useState } from 'react'
 import api from 'services/api'
 import { useRequireds, useUser } from 'contexts'
 
-import Input from 'components/Input'
-import InputsBirthDay from 'components/InputsBirthDay'
 import UsersTable from 'components/UsersTable'
-import StatusMessage from 'components/StatusMessage'
+import ErrorMessage from 'components/ErrorMessage'
+import Step from 'components/Step'
 
 import * as S from './styles'
 
@@ -19,7 +18,7 @@ import {
 
 const Main = () => {
   const [step, setStep] = useState(1)
-  const [statusMessage, setStatusMessage] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(false)
 
   const { userData, setUserData } = useUser()
 
@@ -44,7 +43,7 @@ const Main = () => {
     if (step == 3 && requireds.comments != -1) {
       handlePost()
     } else if (step == 3) {
-      setStatusMessage(true)
+      setErrorMessage(true)
     }
 
     if (
@@ -53,10 +52,10 @@ const Main = () => {
       requireds.dateOfBirth === 1 &&
       requireds.phone === 1
     ) {
-      setStatusMessage(false)
+      setErrorMessage(false)
       setStep(3)
     } else if (step == 2) {
-      setStatusMessage(true)
+      setErrorMessage(true)
       setRequireds({
         ...requireds,
         gender: requireds.gender < 1 ? -1 : 1,
@@ -71,10 +70,10 @@ const Main = () => {
       requireds.surname === 1 &&
       requireds.email === 1
     ) {
-      setStatusMessage(false)
+      setErrorMessage(false)
       setStep(2)
     } else if (step == 1) {
-      setStatusMessage(true)
+      setErrorMessage(true)
       setRequireds({
         ...requireds,
         firstName: requireds.firstName < 1 ? -1 : 1,
@@ -147,9 +146,6 @@ const Main = () => {
 
     if (target.name === 'gender') bool = isGenderValid(target.value)
 
-    console.log(target.name)
-    console.log(bool)
-
     setRequireds({ ...requireds, [target.name]: bool ? 1 : -1 })
   }
 
@@ -165,103 +161,85 @@ const Main = () => {
 
   return (
     <S.Wrapper>
-      <S.Step>
-        <S.Form isOpened={step == 1}>
-          <S.Header>Step 1: Your details</S.Header>
-          <S.Field>
-            <Input
-              label="First Name"
-              autoFocus={true}
-              name="firstName"
-              widthSmall="48%"
-              width="auto"
-              type="text"
-              showAlert={requireds.firstName}
-              parentBlurCallback={handleValidator}
-              parentCallback={handleInputChange}
-              value={userData.firstName}
-            />
-            <Input
-              label="Surname"
-              name="surname"
-              widthSmall="48%"
-              width="70%"
-              type="text"
-              showAlert={requireds.surname}
-              parentBlurCallback={handleValidator}
-              parentCallback={handleInputChange}
-              value={userData.surname}
-            />
-          </S.Field>
-
-          <S.Field>
-            <Input
-              label="Email Address"
-              name="email"
-              widthSmall="100%"
-              type="email"
-              showAlert={requireds.email}
-              parentBlurCallback={handleValidator}
-              parentCallback={handleInputChange}
-              width={'300px'}
-            />
-          </S.Field>
-
-          <S.Button onClick={(e) => handleNext(e)}>{'Next >'}</S.Button>
-        </S.Form>
-      </S.Step>
-
-      <S.Step>
-        <S.Form isOpened={step == 2}>
-          <S.Header>Step 2: More comments</S.Header>
-          <S.Field>
-            <Input
-              label="Telephone number"
-              widthSmall="48%"
-              name="phone"
-              showAlert={requireds.phone}
-              parentCallback={handleInputChange}
-              value={userData.phone}
-            />
-            <Input
-              label="Gender"
-              elementType="select"
-              widthSmall="48%"
-              name="gender"
-              options={genders}
-              showAlert={requireds.gender}
-              parentCallback={handleInputChange}
-              value={userData.phone}
-            />
-          </S.Field>
-
-          <S.Field>
-            <InputsBirthDay />
-          </S.Field>
-
-          <S.Button onClick={(e) => handleNext(e)}>{'Next >'}</S.Button>
-        </S.Form>
-      </S.Step>
-
-      <S.Step>
-        <S.Form isOpened={step == 3}>
-          <S.Header>Step 3: Final comments</S.Header>
-          <S.Field>
-            <Input
-              label="Comments"
-              elementType="textArea"
-              type="text"
-              name="comments"
-              widthSmall="100%"
-              showAlert={requireds.comments}
-              parentCallback={handleInputChange}
-              value={userData.comments}
-            />
-          </S.Field>
-
-          <S.Button onClick={(e) => handleNext(e)}>{'Next >'}</S.Button>
-        </S.Form>
-      </S.Step>
+      <Step
+        status={step}
+        number={1}
+        title={'Your details'}
+        callBackInputChange={handleInputChange}
+        callBackInputBlur={handleValidator}
+        callBackNextBtn={handleNext}
+        elements={[
+          [
+            {
+              name: 'firstName',
+              label: 'First Name',
+              elementType: 'input'
+            },
+            {
+              name: 'surname',
+              label: 'Surname',
+              width: '70%',
+              elementType: 'input'
+            }
+          ],
+          [
+            {
+              name: 'email',
+              type: 'email',
+              label: 'Email Address',
+              width: '300px',
+              elementType: 'input'
+            }
+          ]
+        ]}
+      />
+      <Step
+        status={step}
+        number={2}
+        title={'More comments'}
+        callBackInputChange={handleInputChange}
+        callBackInputBlur={handleValidator}
+        callBackNextBtn={handleNext}
+        elements={[
+          [
+            {
+              name: 'phone',
+              label: 'Telephone number',
+              elementType: 'input'
+            },
+            {
+              name: 'gender',
+              label: 'Gender',
+              elementType: 'select',
+              options: genders
+            }
+          ],
+          [
+            {
+              name: '',
+              label: '',
+              elementType: 'birthday'
+            }
+          ]
+        ]}
+      />
+      <Step
+        status={step}
+        number={3}
+        title={'Final comments'}
+        callBackInputChange={handleInputChange}
+        callBackInputBlur={handleValidator}
+        callBackNextBtn={handleNext}
+        elements={[
+          [
+            {
+              name: 'comments',
+              label: 'Comments',
+              elementType: 'textArea'
+            }
+          ]
+        ]}
+      />
 
       {step == 4 && (
         <S.Display>
@@ -269,7 +247,7 @@ const Main = () => {
         </S.Display>
       )}
 
-      {statusMessage && <StatusMessage requireds={requireds} />}
+      {errorMessage && <ErrorMessage requireds={requireds} />}
     </S.Wrapper>
   )
 }

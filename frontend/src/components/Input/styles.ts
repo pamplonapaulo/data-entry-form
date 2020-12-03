@@ -3,7 +3,6 @@ import styled from 'styled-components'
 export const InputWrapper = styled.div<{
   widthSmall?: string
   customWidth?: string
-  dataName: string
 }>`
   display: flex;
   flex-direction: column;
@@ -94,7 +93,7 @@ export const SelectWrapper = styled.div<{
     border-radius: 0 10px 10px 0;
     background: #fff;
     box-shadow: inset 0 0 6px
-    ${(p) => (p.showAlert === -1 ? 'red' : 'rgba(0, 0, 0, 0.6);')};
+      ${(p) => (p.showAlert === -1 ? 'red' : 'rgba(0, 0, 0, 0.6);')};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -103,7 +102,6 @@ export const SelectWrapper = styled.div<{
 `
 
 export const Select = styled.select<{
-  customWidth?: string
   showAlert?: number
 }>`
   height: 35px;
