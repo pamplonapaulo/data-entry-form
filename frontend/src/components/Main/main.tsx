@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import api from 'services/api'
 import { useRequireds, useUser } from 'contexts'
 
-import UsersTable from 'components/UsersTable'
+import UsersDB from 'components/UsersDB'
 import ErrorMessage from 'components/ErrorMessage'
 import Step from 'components/Step'
 
@@ -153,93 +153,92 @@ const Main = () => {
 
   return (
     <S.Wrapper>
-      <Step
-        status={step}
-        number={1}
-        title={'Your details'}
-        callBackInputChange={handleInputChange}
-        callBackInputBlur={handleValidator}
-        callBackNextBtn={handleNext}
-        elements={[
-          [
-            {
-              name: 'firstName',
-              label: 'First Name',
-              elementType: 'input'
-            },
-            {
-              name: 'surname',
-              label: 'Surname',
-              width: '70%',
-              elementType: 'input'
-            }
-          ],
-          [
-            {
-              name: 'email',
-              type: 'email',
-              label: 'Email Address',
-              width: '300px',
-              elementType: 'input'
-            }
-          ]
-        ]}
-      />
-      <Step
-        status={step}
-        number={2}
-        title={'More comments'}
-        callBackInputChange={handleInputChange}
-        callBackInputBlur={handleValidator}
-        callBackNextBtn={handleNext}
-        elements={[
-          [
-            {
-              name: 'phone',
-              label: 'Telephone number',
-              elementType: 'input'
-            },
-            {
-              name: 'gender',
-              label: 'Gender',
-              elementType: 'select',
-              options: genders
-            }
-          ],
-          [
-            {
-              name: '',
-              label: '',
-              elementType: 'birthday'
-            }
-          ]
-        ]}
-      />
-      <Step
-        status={step}
-        number={3}
-        title={'Final comments'}
-        callBackInputChange={handleInputChange}
-        callBackInputBlur={handleValidator}
-        callBackNextBtn={handleNext}
-        elements={[
-          [
-            {
-              name: 'comments',
-              label: 'Comments',
-              elementType: 'textArea'
-            }
-          ]
-        ]}
-      />
+      <S.SubWrapper>
+        <Step
+          status={step}
+          number={1}
+          title={'Your details'}
+          callBackInputChange={handleInputChange}
+          callBackInputBlur={handleValidator}
+          callBackNextBtn={handleNext}
+          elements={[
+            [
+              {
+                name: 'firstName',
+                label: 'First Name',
+                elementType: 'input'
+              },
+              {
+                name: 'surname',
+                label: 'Surname',
+                width: '70%',
+                elementType: 'input'
+              }
+            ],
+            [
+              {
+                name: 'email',
+                type: 'email',
+                label: 'Email Address',
+                width: '300px',
+                elementType: 'input'
+              }
+            ]
+          ]}
+        />
+        <Step
+          status={step}
+          number={2}
+          title={'More comments'}
+          callBackInputChange={handleInputChange}
+          callBackInputBlur={handleValidator}
+          callBackNextBtn={handleNext}
+          elements={[
+            [
+              {
+                name: 'phone',
+                label: 'Telephone number',
+                elementType: 'input'
+              },
+              {
+                name: 'gender',
+                label: 'Gender',
+                elementType: 'select',
+                options: genders
+              }
+            ],
+            [
+              {
+                name: '',
+                label: '',
+                elementType: 'birthday'
+              }
+            ]
+          ]}
+        />
+        <Step
+          status={step}
+          number={3}
+          title={'Final comments'}
+          callBackInputChange={handleInputChange}
+          callBackInputBlur={handleValidator}
+          callBackNextBtn={handleNext}
+          elements={[
+            [
+              {
+                name: 'comments',
+                label: 'Comments',
+                elementType: 'textArea'
+              }
+            ]
+          ]}
+        />
+      </S.SubWrapper>
+      <S.SubWrapper>
+        {step == 4 && <UsersDB users={users} />}
 
-      {step == 4 && (
-        <S.Display>
-          <UsersTable data={users} />
-        </S.Display>
-      )}
-
-      {errorMessage && <ErrorMessage requireds={requireds} />}
+        {errorMessage && <ErrorMessage requireds={requireds} />}
+      </S.SubWrapper>
     </S.Wrapper>
   )
 }
