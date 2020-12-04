@@ -20,14 +20,15 @@ export const Step = styled.div`
 `
 
 export const Form = styled.form<{ isOpened: boolean }>`
-  background-color: #dedede;
+  background-color: ${(p) => (p.isOpened ? '#dedede' : 'transparent')};
   border-radius: 7px;
   display: flex;
   flex-direction: column;
   height: auto;
-  min-height: 50px;
-  max-height: ${(p) => (p.isOpened ? '600px' : '50px')};
-  transition: max-height 0.6s ease;
+  min-height: 55px;
+  max-height: ${(p) => (p.isOpened ? '600px' : '55px')};
+  transition: all 0.9s ease;
+  overflow: hidden;
 `
 
 export const Header = styled.h1`
@@ -73,5 +74,9 @@ export const Button = styled.button`
 
   &:hover {
     background-color: #28262c;
+  }
+
+  &:active {
+    background-color: #655bb4;
   }
 `

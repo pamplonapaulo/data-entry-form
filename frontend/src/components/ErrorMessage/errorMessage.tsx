@@ -3,20 +3,13 @@ import React from 'react'
 import * as S from './styles'
 
 import { Requireds } from 'types/api'
+import { formatFieldName } from 'utils/formatFieldName'
 
 type Props = {
   requireds: Requireds
 }
 
 const ErrorMessage = ({ requireds }: Props) => {
-  const formatFieldName = (name: string) => {
-    const words = name.match(/[A-Z]+[^A-Z]*|[^A-Z]+/g)
-    if (words) {
-      return words.join(' ')
-    } else {
-      return name
-    }
-  }
   const mapRequireds = (requireds: Requireds) => {
     const arr = []
     for (const [key, value] of Object.entries(requireds)) {
